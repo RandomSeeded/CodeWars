@@ -1,0 +1,33 @@
+<html>
+<script>
+
+function DNAStrand(dna) {
+   // we dont want to use the replace method
+   var complement = "";
+   for (var i = 0; i < dna.length; i++) {
+      if (dna.charAt(i) == "A") complement+= "T";
+      if (dna.charAt(i) == "T") complement+= "A";
+      if (dna.charAt(i) == "C") complement+= "G";
+      if (dna.charAt(i) == "G") complement+= "C";
+   }
+   return complement;
+}
+console.log(DNAStrand("ATTGC"));
+
+
+// Best practices version:
+
+function BestDNAStrand(dna) {
+   return dna.replace(/./g, function(c) { // replace all characters according to the function
+      return DNAstrand.pairs[c]; // use the converse value, as stored in this randomass object's property of the given name
+   }
+}
+DNAStrand.pairs = { // create the properties
+   A: 'T',
+   T: 'A',
+   C: 'G',
+   G: 'C',
+}
+
+</script>
+</html>

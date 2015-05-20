@@ -1,0 +1,43 @@
+<html>
+<script>
+
+// issue #1: how do we take care of unlimited number of arguments?
+// Answer: we use the arguments object. This is probably not done with best practices
+// NOTE: this top version still needs to remove doubles/floats
+function sum() {
+   var sum = 0;
+   for (var i = 0; i < arguments.length; i++) {
+      if (typeof arguments[i] === "number") sum+=arguments[i];
+   }
+   return sum;
+}
+console.log(sum(1,2,3));   // -> 6
+console.log(sum(1,"2",3)); // -> 4
+
+// can we clean this up?
+function smallSum() {
+   // make proper version of arguments: this is best practice I believe
+   var args = [];
+   for (var i = 0; i < arguments.length; i++) { args[i] = arguments[i]; }
+
+   // use simple reduce function
+   return args.reduce(function(sum,element) {
+      if (isInt(element)) sum+=element;
+      return sum;
+   }, 0);
+
+   // helper function
+   function isInt(num) {
+      return (typeof num === "number" && num % 1 === 0);
+   }
+}
+console.log(smallSum(1,2,3));   // -> 6
+console.log(smallSum(1,"2",3)); // -> 4
+console.log(smallSum(4,true,4,"A",4,"99"));
+
+// Best Practices Version: the same as the original, but using the following line in addition to typeof:
+// Math.floor(arguments[i]) === arguments[i]
+// Similar to our modulo condition in our helper function
+
+</script>
+</html>
