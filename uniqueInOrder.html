@@ -1,0 +1,30 @@
+<html>
+<script>
+
+var uniqueInOrder = function(iterable) {
+   // NOTE: iterable can be either a string or an array
+   var newArr = [];
+   var lastElem = "";
+   // prob not best practice using iterable[i] in case its string
+   for (var i = 0; i < iterable.length; i++) {
+      if (iterable[i] !== lastElem) {
+         lastElem = iterable[i];
+         newArr.push(iterable[i]);
+      }
+   }
+   return newArr;
+}
+console.log(uniqueInOrder('AAAABBBCCDAABBB'));
+
+// Best practices differences:
+// no need to initialize lastElem to "", can just leave it as undefined
+// can do:
+/*
+   if (iterable[i] !== last) {
+      result.push(last = iterable[i]);
+   }
+*/
+// which just combines your two statements [assignation of last and the push] into one
+
+</script>
+</html>

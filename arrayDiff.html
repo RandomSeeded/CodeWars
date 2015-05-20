@@ -1,0 +1,55 @@
+<html>
+<script>
+
+// removes all values from list a which are present in list b
+function array_diff(a, b) {
+   var newArr = [];
+   for (var i = 0; i < a.length; i++) {
+      if (b.indexOf(a[i]) === -1) newArr.push(a[i]);
+   }
+   return newArr;
+}
+console.log(array_diff([1,2],[1]));
+
+// some functionized fun with callbacks
+function mod_array(a, b, fn) {
+   var newArr = [];
+   for (var i = 0; i < a.length; i++) {
+      fn(a[i], b, newArr);
+   }
+   return newArr;
+}
+function diff(elem, b, newArr) {
+   if (b.indexOf(elem) === -1) newArr.push(elem);
+}
+function both(elem, b, newArr) {
+   if (b.indexOf(elem) !== -1) newArr.push(elem);
+}
+console.log(mod_array([1,2],[1], diff));
+console.log(mod_array([1,2],[1], both));
+
+// can we make a cleaner version?
+function array_filter(a, b) {
+   // callback is invoked with 3 arguments:
+      // 1) value of the element
+      // 2) index of the element
+      // 3) array being traversed
+   return a.filter(compareToB);
+   function compareToB(value) {
+      return b.indexOf(value) === -1;
+   }
+}
+console.log(array_filter([1,2], [1]));
+
+// clean anonymous function version
+function array_anon(a, b) {
+   return a.filter(function(value) {
+      return b.indexOf(value) === -1;
+   });
+}
+console.log(array_anon([1,2], [1]));
+
+// Hey, that's exactly best practices version :D
+
+</script>
+</html>
