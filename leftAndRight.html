@@ -1,0 +1,36 @@
+<html>
+<script>
+
+function left$(str, i) {
+   // base case: positive integer or 0, return the first i characters of the string
+   if (typeof i == "undefined") i = 1;
+   if (i >= 0) {
+      return str.substr(0, i);
+   }
+
+   // exception: negative i - remove the i last characters
+   else if (i < 0) {
+      return str.substring(0, str.length+i);
+   }
+}
+console.log(left$("Hello o o o World", 5));
+console.log(left$("Hello o o o World", 0));
+console.log(left$("Hello o o o World"));
+console.log(left$("Hello o o o World", 99));
+console.log(left$("Hello", -1));
+console.log("----");
+
+var str = 'Hello (not so) cruel World!'
+
+console.log(left$(str,5));   // -> 'Hello'
+console.log(left$(str,-22)); // -> 'Hello'
+console.log(left$(str,1));   // -> 'H'
+console.log(left$(str));     // -> 'H' too
+console.log(left$(str,0));   // -> ''
+console.log(left$(str,99));  // -> 'Hello (not so) cruel World!'
+
+// TODO ON THIS: 1) right function
+// 2) i can be a string, which will return to the left or right of the finding of that string
+
+</script>
+</html>
