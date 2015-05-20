@@ -1,0 +1,17 @@
+<html>
+<script>
+
+// change all but the last four characters into '#'
+function maskify(cc) {
+   return cc.substr(0, cc.length-4).replace(/./g,"#") + cc.substring(cc.length-4, cc.length);
+}
+console.log(maskify("1234567890"));
+console.log(maskify("123"));
+
+// Best practices version: equivalent, but uses slice which is just awesomer
+function maskify(cc) {
+   return cc.slice(0, -4).replace(/./g,"#") + cc.slice(-4);
+}
+
+</script>
+</html>

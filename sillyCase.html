@@ -1,0 +1,48 @@
+<html>
+<script>
+
+function sillyCase(silly) {
+   var newStr = "";
+   for (var i = 0; i < silly.length; i++) {
+      if (i < Math.ceil(silly.length / 2)) { newStr+=silly.charAt(i).toLowerCase(); }
+      else newStr += silly.charAt(i).toUpperCase();
+   }
+   return newStr;
+}
+console.log(sillyCase("Even"));
+console.log(sillyCase("Odd"));
+
+// some messing around with functional programming
+function modCase(str, fn) {
+   var newStr = "";
+   for (var i = 0; i < str.length; i++) {
+      newStr += fn(str, i);
+   }
+   return newStr;
+}
+
+function modSillyCase(str, i) {
+   if (i < Math.ceil(str.length / 2)) { return str.charAt(i).toLowerCase(); }
+   else return str.charAt(i).toUpperCase();
+}
+function reverseCase(str, i) {
+   if (i < Math.ceil(str.length / 2)) { return str.charAt(i).toUpperCase(); }
+   else return str.charAt(i).toLowerCase();
+}
+// The following 2 are equivalent
+console.log(modCase("ModCase", function(str, i) {
+   if (i < Math.ceil(str.length / 2)) { return str.charAt(i).toLowerCase(); }
+   else return str.charAt(i).toUpperCase();
+}));
+console.log(modCase("ModCase #2", modSillyCase));
+// And an example of how functional can be flexible
+console.log(modCase("ModCase #3", reverseCase));
+
+// Best practices version: just applies it to whole string sections instead of one char at a time. D'oh hah
+function sillyCase(silly) {
+   var c = Math.round(silly.length / 2);
+   return silly.substr(0, c).toLowerCase() + silly.substr(c).toUpperCase();
+}
+
+</script>
+</html>
