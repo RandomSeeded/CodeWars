@@ -1,0 +1,28 @@
+<html>
+<script>
+
+// crack #1
+function isLeapYear(year) {
+   if (year % 400 === 0) return true;
+   else if (year % 100 === 0) return false;
+   else if (year % 4 === 0) return true;
+   return false;
+}
+
+// 1-lined
+function miniLeapYear(year) {
+   return ((year % 400 === 0) || (year % 4 === 0 && year % 100 !== 0));
+}
+
+// best: pretty much the exact same as what we wrote above. So thats good.
+console.log(isLeapYear(1921));
+console.log(isLeapYear(2000));
+console.log(isLeapYear(2100));
+
+console.log("#2:");
+console.log(miniLeapYear(1921));
+console.log(miniLeapYear(2000));
+console.log(miniLeapYear(2100));
+
+</script>
+</html>
