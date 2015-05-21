@@ -1,0 +1,119 @@
+<html>
+<script>
+
+// Best practices version: whoa
+function chained(functions) {
+   return function(input) {
+      return functions.reduce(function(input, fn) { return fn(input) }, input);
+      // So whats going on here is:
+      // We have our array of functions, and 'input' is given as array[-1] or whatever you want to call it, init value for our reduce
+      // We go through and resolve our functions one at a time, dang this is clever
+      // So for each function, we pass it input, come up with a value, and save that value as the new input
+      // Then we advance to next function
+      // So we created a SUPER FUNCTION of awesomeness
+      // This version doesn't bother, it just creates/returns a reduce function
+   }
+}
+
+// TAKE 2:
+// Our goal is to build a FUNCTION CHAIN
+// which will then be passed a single parameter
+function chained(functions) {
+   // base case: 1 function
+   if (functions.length == 1) {
+      return functions[0];
+   }
+   // case 2: 2 functions for now
+   // So we are passed: [return x+2;, return x*2;]
+   // We want to return: return (x+2)*2;
+   else {
+      var fn = functions.pop();
+      return function(i) {
+/*         return (f1(i))+2;*/
+/*         return (chained(functions)(i))+2;*/
+         return fn((chained(functions)(i)));
+         // now note that this is us recreating the f2 definition
+         // f2 is x+2
+      }
+   }
+}
+function f1(x){ return x*2 }
+function f2(x){ return x+2 }
+function f3(x){ return Math.pow(x,2) }
+
+function f4(x){ return x.split("").concat().reverse().join("").split(" ")}
+function f5(xs){ return xs.concat().reverse() }
+function f6(xs){ return xs.join("_") }
+console.log(chained([f1])(1));
+console.log(chained([f1, f2])(1));
+console.log(chained([f1,f2,f3])(2));
+
+// LOTS OF TAKEAWAYS FROM THIS:
+// How we did it (eventually): recreate what we wanted to see
+// IMPORTANT THING TO NOTE: we need to keep passing the (i) along the chain
+// Why? 
+// Because if we take a look at the f2 definition, we want to return:
+// (x*2) + 2. However, if the inside has no idea what the hell x is, everything will go wrong. And we'll end up with the string "x*2" + 2 -> "x*22"
+// So we pass along i for when we eventually EXECUTE all these chained functions
+// We then MODIFY the outer function such that it takes a new form
+// So function 2: x + 2, is CHANGED
+// And becomes (x * 2) + 2 [equivalent to (f2(f1(x)))]
+
+/*
+function chained(functions) {
+   // functions is an array of functions such that
+   // chained([a,b,c,d])(input)
+   // should yield same result as 
+   // d(c(b(a(input))))
+   
+   // seems to me like we want to do this recursively
+
+   // base case: chained([a])(input): return the function stored in function[0]
+   // so chained([a])(input) -> a [which will then be passed input]
+   if (functions.length === 1) {
+      return functions[0];
+   }
+   
+   // Multiple functions in the array: what do we want to return?
+   // We are given two functions, a and b
+   // We want to return b(a)
+   // What does this mean?
+   // HOW DO WE IMPLEMENT OUR RECURSION?
+   else {
+      var b = functions.pop();
+      return function() {
+         return b(chained(functions));
+      };
+   }
+}
+
+function f1(x){ return x*2 }
+function f2(x){ return x+2 }
+function f3(x){ return Math.pow(x,2) }
+
+function f4(x){ return x.split("").concat().reverse().join("").split(" ")}
+function f5(xs){ return xs.concat().reverse() }
+function f6(xs){ return xs.join("_") }
+
+// console.log("test");
+// console.log(chained([f1])(1));
+// console.log(chained([f1]));
+console.log(chained([f1,f2]));
+console.log(chained([f1,f2])(1));
+// Result should be: 4
+// We're not actually EXECUTING our function properly, because chained[f1, f2] is not working properly
+// So when we try to execute b(chained(functions)) what we're actually doing is
+// [chained(functions[0]) + 2]
+// But we don't actually evaluate chained(functions[0]), so we instead just get a function back
+// And then we attempt to do outer function = inner function + 2
+// But inner function has no meaning so it's converted to a string
+// And then we just uselessly append 2 to the end of it
+
+// I'm not sure our recursion is right.
+*/
+/*console.log(chained([f1,f2,f3])(2));*/
+
+
+
+</script>
+</html>

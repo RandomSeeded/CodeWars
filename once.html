@@ -1,0 +1,30 @@
+<html>
+<script>
+
+// best practices version:
+// So big change vs my thought:
+// I thought I had to do a GLOBAL variable, which was super hackish.
+// But I do NOT
+// Because the closure (inner fn) has access to the outer fn's vars
+// So all we do is modify the function we RETURN [inner fn] such that it has an if statement inside of it
+// Which we declared inside the outer function. Clever
+function once(fn) {
+   var call = true;
+   return function() {
+      if (call) {
+         call = false;
+         return fn.apply(this, arguments);
+      }
+   }
+}
+
+// takes a function as an argument, and returns a new version of that function that can only be called once...not sure where to go from here
+function once(fn) {
+   return function() {
+      return fn.apply(null, arguments);
+   };
+}
+/*console.log(once(Math.pow)(2,3));*/
+
+</script>
+</html>

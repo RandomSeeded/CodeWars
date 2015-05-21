@@ -1,0 +1,79 @@
+<html>
+<script>
+
+// Best practices version: somebody knew how to do the regexp
+function bpAutocorrect(input) {
+   return input.replace(/\b(you+|u)\b/gi, "your sister");
+   // What does this regexp mean?
+   // \b: matches a ZERO WITH WORD BOUNDARY, a la between a word and a space
+   // So what we have here is:
+   // Word STARTING WITH YOU OR U
+   // With the U in YOU allowed to repeat
+   // AND THEN A END OF WORD AFTER
+}
+
+// Take 3: can we clean this up?
+function autocorrect(input) {
+   // All we REALLY need to do is figure out how to regular expression, then do a replace
+   // So what is our pattern?
+   // Ignoring case (flag)
+   // You
+   // *U* where * is a non-alphabetic character
+   // Youuuuuuuu of any length greater than or equal to 4 [maybe conbined with the first case]
+   // No idea how to do that with regexp. 
+}
+
+// Take 2
+function autocorrect(input) {
+   // Note: words are not necessary just split by spaces
+   // "I Miss You!" -> "I Miss Your Sister!"
+   var word = "";
+   var outputStr = "";
+   for (var i = 0; i < input.length; i++) {
+      // letter is a character
+      if (input.charAt(i).match(/[a-z]/i)) {
+         word+=input.charAt(i);
+      }
+      // letter is not a character: end of word
+      else { 
+         if (isYou(word)) { word = "your sister"; } 
+         outputStr+= word+input.charAt(i);
+         word = "";
+      }
+   }
+   // once more for final character
+   if (isYou(word)) { word = "your sister"; } 
+   outputStr+= word+input.charAt(i);
+   return outputStr;
+
+   function isYou(word) {
+      var lcWord = word.toLowerCase();
+      return lcWord === "you"
+         || lcWord === "u"
+         || (lcWord.substr(0,3) === "you" && lcWord.replace(/[^u]/g,"").length === lcWord.length-2);
+   }
+}
+console.log(autocorrect("You"));
+console.log(autocorrect("Testing You Here We Go Youuuuuuu"));
+console.log(autocorrect("I Miss You!"));
+
+// Take 1
+/*function autocorrect(input) {
+   // I wouldnt be surprised if there was a way to do this with regular expressions. But I don't know it
+   var words = input.split(" ");
+   var outputStr = [];
+   for (var i = 0; i < words.length; i++) {
+      var word = words[i].toLowerCase();
+      // replace case full match
+      if (word === "you" || word === "u") { outputStr.push("your","sister"); }
+      // replace case youuuuuuu 
+      else if (word.substr(0,3) == "you" && word.replace(/[^u]/g,"").length === word.length-2) { outputStr.push("your","sister"); }
+      else { outputStr.push(word); }
+   }
+   return outputStr.join(" ");
+}
+console.log(autocorrect("Testing You Here We Go Youuuuuuu"));
+console.log(autocorrect("I Miss You!"));*/
+
+</script>
+</html>

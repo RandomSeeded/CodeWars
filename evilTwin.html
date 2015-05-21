@@ -1,0 +1,43 @@
+<html>
+<script>
+
+// creates a new object with all the same properties as obj, but with one addition property hasGoatee set to true
+// trickier part: the evil twin should reflect all modifications to the original
+// INHERITANCE: the below sets the prototype of evilTwin to the object, such that any properties we dont specifically enumerate simply point up the prototype chain and are therefore modified by any modifications to obj
+/*function evilTwin(obj) {
+   var evilTwin = Object.create(obj);
+   evilTwin.hasGoatee = true;
+   return evilTwin;
+}
+*/
+// after reading object.create documentation:
+/*function evilTwin(obj) {
+   return Object.create(obj, {hasGoatee: true});
+}*/
+// Close, but not quite. Correct is (from best practices)
+function evilTwin(obj) {
+   return Object.create(obj, { hasGoatee: {value: true}});
+}
+var obj = {squirrel: false, events: ["work", "touched tree"] };
+console.log(evilTwin(obj));
+var testObj = {hasGoatee: true};
+var testObj2 = {hasGoatee: { value:true } };
+console.log(testObj);
+console.log(testObj2);
+// I'm confused: why is it our property is an object with a property named value, and that's true? 
+// OK so reason is: because we are passing a PROPERTIES OBJECT (just one of the parameters to object.create
+// And the def of that is, basically, an object constructed according to the format used in the best practices example
+
+
+// base case: doesn't reflect changes
+/*function evilTwin(obj) {
+   var evilTwin = {};
+   for (var property in obj) {
+      evilTwin[property] = obj[property];
+   }
+   evilTwin.hasGoatee = true;
+   return evilTwin;
+}*/
+
+</script>
+</html>
