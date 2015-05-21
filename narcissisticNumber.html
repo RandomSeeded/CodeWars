@@ -1,0 +1,34 @@
+<html>
+<script>
+
+// Assignment: return the value of a number which is the sum of its digits each raised to the power of the number of the digits
+// e.g.: 153 ->
+// (1^3) + (5^3) + (3^3) = 1 + 125 + 27 = 153
+// Whoops, not quite
+// Return boolean containing t/f if the sum == the value itself
+// so 153 narcississted == 153, return true
+
+function narcissistic(value) {
+   var sum = 0;
+   var strValue = String(value);
+   for (var i = 0; i < strValue.length; i++) {
+      sum+= Math.pow(Number(strValue.charAt(i)),strValue.length);
+   }
+   return sum == value;
+}
+console.log(narcissistic(153));
+console.log(narcissistic(154));
+
+// Best practices version:
+// turns num into a string (same)
+// then splits it out into array and reduces it, with value p holding the sum
+// and c holding the digit
+// eh that works fine I guess...honestly I think it's less readable than mine
+function narcissistic(value) {
+   return ('' + value).split('').reduce(function(p, c) {
+      return p + Math.pow(c, ('' + value).length);
+   }, 0) == value;
+}
+
+</script>
+</html>

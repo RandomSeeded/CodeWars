@@ -1,0 +1,77 @@
+<html>
+<script>
+
+// Assignment:
+// For a string, turn any words of length 4 or greater into an abbreviation according to the pattern: first letter + [# of middle letters] + last letter
+
+function abbreviate(string) {
+   // ISSUES: we need to handle this weird definition of "word"
+   // You simply CANNOT do it the way below, because the join won't work even if you could get the split to work
+   var abbreviatedStr = "";
+   var word = "";
+   for (var i = 0; i < string.length; i++) {
+      // case 1: character is alphabetic
+      if (string.charAt(i).match(/[a-z]/i)) {
+         word+=string.charAt(i);
+      }
+
+      // case 2: character is non-alphabetic (word is complete)
+      else {
+         abbreviatedStr += abbreviate(word);
+         abbreviatedStr += abbreviate(string.charAt(i));
+         word = "";
+      }
+   }
+   // one final addition for the last word in the string (if it exists)
+   abbreviatedStr += abbreviate(word);
+
+   function abbreviate(word) {
+      if (word.length < 4) return word;
+      else { return word.charAt(0) + (word.length - 2) + word.charAt(word.length-1); }
+   }
+   return abbreviatedStr;
+   
+/*   var newStr = "";
+   var firstLetter = "";
+   var midLetterCount = 0;
+   // ISSUE WITH THIS: it doesnt take the 4 letter restriction into account
+   for (var i = 0; i < string.length; i++) {
+      // case 1: the character is a letter
+      if (string.charAt(i).match(/[A-Za-z]/)) {
+         if (firstLetter == "") { firstLetter = string.charAt(i); }
+         else midLetterCount++;
+      }
+      // case2: the character is not a letter
+      else {
+         newStr = newStr + firstLetter + midLetterCount + string.charAt(i);
+         firstLetter = "";
+         midLetterCount = 0;
+      }
+   }*/
+
+
+/*   var words = string.split(" ");
+   var transformedWords = [];
+   for (var i = 0; i < words.length; i++) {
+      var elem = words[i];
+      if (elem.length >= 4) {
+         transformedWords.push(elem.charAt(0)+(elem.length-2)+elem.charAt(elem.length-1));
+      }
+      else transformedWords.push(elem);
+   }
+   return transformedWords.join();*/
+}
+
+/*console.log(abbreviate("internationalization"));*/
+console.log(abbreviate("Hello World How Are You Today??"));
+
+// BEST PRACTICES VERSION: well that certainly blows mine out of the water
+var find = /[a-z]{4,}/gi; // I assume this means find string patterns consisting of a-z (either case) of at least length 4. Well thats handy
+function replace(match) { return match[0] + (match.length - 2) + match[match.length-1]; }
+
+function abbreviate(string) {
+   return string.replace(find, replace);
+}
+
+</script>
+</html>
