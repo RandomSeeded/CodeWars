@@ -1,0 +1,34 @@
+<html>
+<script>
+
+// assignment: determine whether a string is a valid palindrome or not
+// case insensitive
+// disregards non-alphanumeric
+
+// Best practices version: uses reduceright to produce a mirror image of the string, then returns orig === reducedright version
+// It's not that special.
+
+// take #2: dang, I'm pretty proud of this. One downside is it goes over all values of the array, not just the first half
+function pal(string) {
+   // IMPORTANT THING TO NOTE: reduce does NOT modify arr as you go along. 
+   return string.toLowerCase().match(/[a-z0-9]/g).reduce(function(isPalindrome, element, i, arr) {
+      return isPalindrome && (arr[i] === arr[arr.length-1-i]);
+   }, true);
+}
+
+// take #1:
+function palindrome(string) {
+   var subset = string.toLowerCase().match(/[a-z0-9]/ig);
+   var isPalindrome = true;
+   for (var i = 0; i < Math.floor(subset.length/2); i++) {
+      if (subset[i] !== subset[subset.length-1-i]) {
+         isPalindrome = false;
+      }
+   }
+   return isPalindrome;
+}
+console.log(palindrome("Amore, Roma"));
+console.log(pal("Amore, Roma"));
+
+</script>
+</html>

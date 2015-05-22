@@ -1,0 +1,70 @@
+<html>
+<script>
+
+// Assignment: count the # of duplicates:
+// Write a function that will return the count of distinct case-insensitive alphabetic characters that occur more than once in the given string. The given string can be assumed to contain only uppercase and lowercase alphabets.
+
+// Best practices version: note: actually DOESNT RESTRICT TO ALPHABETIC. BUT THAT WOULD NOT BE HARD
+function bpDupCount(text) {
+   return (text.toLowerCase().split('').sort().join('').match(/([^])\1+/g) || []).length;
+   // What does this do?
+   // Lower case -> array -> sorted -> string -> regexp
+   // REGEXP: 
+   // [^] refers to everything
+   // () CAPTURES THE VALUE
+   // \1: "back reference to the last substring matching the n parenthetical in the regular expression
+   // 1+: matches the preceding element 1 or more times
+}
+
+// take 2: combining the idea of an object storing what letters we've seen once/twice (our "hash") with array functions
+function cleanDupCount(text) {
+   var seenTwice = {};
+   var numDuplicates = (text.toLowerCase().match(/[a-z]/g)||[]).reduce(function(sum, element) {
+      if (typeof seenTwice[element] === "undefined") { seenTwice[element] = false; }
+      else if (seenTwice[element] === false) {
+         seenTwice[element] = true;
+         sum++;
+      }
+      return sum;
+   }, 0);
+   return numDuplicates;
+}
+
+// take 1: quick and dirty, character by character, also gets to mess around with 
+// objects as "hashes"
+function duplicateCount(text) {
+   var duplicateLetters = {};
+   for (var i = 0; i < text.length; i++) {
+      var character = text.charAt(i).toLowerCase();
+      if (character.match(/[a-z]/)) {
+         if (typeof duplicateLetters[character] == "undefined") {
+            duplicateLetters[character] = false;
+         }
+         else {
+            duplicateLetters[character] = true;
+         }
+      }
+   }
+   var sumDuplicates = 0;
+   for (var property in duplicateLetters) {
+      if (duplicateLetters.hasOwnProperty(property)) {
+         if (duplicateLetters[property]) sumDuplicates++;
+      }
+   }
+   return sumDuplicates;
+}
+/*console.log(duplicateCount("abcde"));
+console.log(duplicateCount("aabbcde"));
+console.log(duplicateCount("aabbc--de"));
+console.log(duplicateCount("aabBcde"));*/
+/*console.log(cleanDupCount(""));
+console.log(cleanDupCount("abcde"));
+console.log(cleanDupCount("aabbcde"));
+console.log(cleanDupCount("aabbc--de"));
+console.log(cleanDupCount("aabBcde"));*/
+console.log(bpDupCount("aabBcde"));
+console.log(bpDupCount("aabBcde---"));
+
+
+</script>
+</html>
