@@ -1,0 +1,17 @@
+<html>
+<script>
+
+// Assignment: http://www.codewars.com/kata/523c7fbb0d47a759580000e2/
+
+// best practices version
+var wire = Object.keys(this).pop();
+
+// take 1
+var wire; // Find the wire.
+for (var property in this) {
+   if (this.hasOwnProperty(property)) wire = property;
+}
+CutTheWire(this[wire]);
+
+</script>
+</html>
