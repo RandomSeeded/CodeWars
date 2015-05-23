@@ -1,0 +1,100 @@
+<html>
+<script>
+
+// problem description here: http://www.codewars.com/kata/5263c5d011f4233c9d000561/train/javascript 
+// Your mission is to write a function getLines, which takes an integer "n" as parameter, and returns a comma separated list of the first "n" terms of the sequence. For 0, negative, or NaN parameters, -1 shall be returned.
+
+// Best practices version: look through this later
+function lookSay(n) {
+  return ('' + n).replace(/((\d)\2*)/g, function(m) {return m.length + m[0];});
+}
+function bpGetLines(line) {
+  if(isNaN(line) || line < 1) {return -1;}
+  var out = [1];
+  for(var i = 1; i < line; i++) out.push(lookSay(out[i - 1]));
+  return out.join(',');
+}
+
+// Take 2: cleaner, hopefully
+function getLines(line) {
+   // Failure cases:
+   if (line <= 0 || isNaN(line)) {
+      return -1;
+   }
+   
+   // Base case:
+   else if (line === 1) {
+      return "1";
+   }
+
+   // Continuation case:
+   var prevLines = getLines(line-1);
+   // in format "1,11,21,1211"
+   var lastLine = prevLines.split(",").pop();
+   var currLine = "";
+   var lastChar = "";
+   var lastCharCount = 0;
+   for (var i = 0; i < lastLine.length; i++) {
+      // same char again
+      if (lastLine.charAt(i) === lastChar) { lastCharCount++; }
+      // New character
+      else {
+         if (lastChar !== "") { currLine += lastCharCount+lastChar; }
+         lastChar = lastLine.charAt(i);
+         lastCharCount = 1;
+      }
+   }
+   currLine += lastCharCount+lastChar;
+   return prevLines.concat(","+currLine);
+}
+console.log(getLines(2));
+console.log(getLines(3));
+console.log(getLines(4));
+console.log(getLines(5));
+console.log(getLines(6));
+
+// OK so first note: to do getLines(3), we need to refrence whatever the result of gL(2) is. So clearly recursive.
+// Take 1: working
+function getOldLines(line) {
+   var returnLine = "";
+
+   recurseLines(line);
+   return returnLine;
+
+   // Using a separate function so we can pass another argument around
+   function recurseLines(line) {
+      // Failure cases:
+      if (line <= 0 || isNaN(line)) {
+         returnLine = -1;
+         return -1;
+      }
+
+      // Base case: 
+      if (line === 1) {
+         returnLine = "1";
+         return "1";
+      }
+
+      // Continuation:
+      var prevLine = recurseLines(line-1);
+      var currLine = "";
+      var prevChar = "";
+      var prevCharCount = 0;
+      for (var i = 0; i < prevLine.length; i++) {
+         // Same character again
+         if (prevLine.charAt(i) === prevChar) { prevCharCount++; }
+         // New character
+         else {
+            if (prevChar !== "") { currLine += prevCharCount+prevChar; }
+            prevChar = prevLine.charAt(i);
+            prevCharCount = 1;
+         }
+      }
+      currLine += prevCharCount+prevChar;
+      returnLine+= ","+currLine;
+      return currLine;
+   }
+}
+
+</script>
+</html>
