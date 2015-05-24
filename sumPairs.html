@@ -1,0 +1,47 @@
+<html>
+<script>
+
+// Assignment: http://www.codewars.com/kata/54d81488b981293527000c8f/train/javascript
+// Given a list of integers and a single sum value, return the first two values (parse from the left please) in order of appearance that add up to form the sum.
+
+
+// Take 2: how can we code this to handle extremely long lists? We need to do in order N time instead of order N^2. 
+function quickSumPairs(ints, s) {
+   var seenNums = {};
+   for (var i = 0; i < ints.length; i++) {
+      if (seenNums.hasOwnProperty(s-ints[i])) { return [s-ints[i], ints[i]]; }
+      else { seenNums[ints[i]] = true; }
+   }
+}
+// Could we do this even smaller/cleaner? We could use a foreach instead of looping manually, but that's w/e. We don't really want to do a reduce, b/c the nice thing about the above is that it exits function quickly on success case. Turns out the above is basically equiv to best practices version
+
+// Logic given below code
+// Take 1:
+function sumPairs(ints, s) {
+   for (var i = 0; i < ints.length; i++) {
+      for (var j = 0; j < i; j++) {
+         if (ints[i] + ints[j] === s) { return [ints[j], ints[i]]; }
+      }
+   }
+}
+console.log(sumPairs([11,3,7,5], 10));
+console.log(quickSumPairs([11,3,7,5], 10));
+console.log(quickSumPairs([1,4,8,7,3,15], 8));
+
+// In cases where there are multiple pairs, we return the one with the earliest 2nd value
+// How can we make sure we look at these in order so we return the first we see? It would go something like:
+/*
+1, 2
+1, 3
+2, 3
+1, 4
+2, 4
+3, 4
+1, 5
+2, 5
+3, 5
+4, 5
+*/
+
+</script>
+</html>
