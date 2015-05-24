@@ -1,0 +1,93 @@
+<html>
+<script>
+
+// Assignment: write a program that will calculate the number of trailing zeros in a factorial number
+// E.g. zeros(12) = 1*2*...*12 = 479001600
+// Which is two zeros
+
+// Best practices version:
+function bpZeros(n) {
+   var countfives = 0,
+      pow5 = 1,
+      occurances;
+   while (pow5 *= 5, occurances = Math.floor(n/pow5)) countfives += occurances;
+   return countfives;
+   // This while loop makes use of the COMMA OPERATOR, which is explored in ../RandomTests/commaOperator.html
+}
+
+// Clean version follows. Though process (convoluted) below
+function zeros(n) {
+   var numZeros = 0;
+   for (var power = 1; Math.pow(5, power) <= n; power++) {
+      numZeros += Math.floor(n / Math.pow(5,power));
+   }
+   return numZeros;
+}
+
+
+// So we think we see the pattern, but we can't prove it
+// OK so we think about it instead as factors
+
+// If we have 12 as our number we have two ways of making 10:
+// 1) 10
+// 2) 5 * 2
+// 1 * 2 * 3 * 4 * 5 * 6 * 7 * 8 * 9 * 10
+// -> 10 * 5 * 2 * [everything else]
+
+// NOTE: once we get above 100 for n, things will change slightly
+// We'd have the additional problem of figuring out things like * 400
+// (which is equiv to 4 * 10 * 10)
+
+// Our first attempt was extremely close, we just didnt know WHY it was the case
+/*function zeros(n) {
+   return Math.floor(n / 5);
+}*/
+// It works, because every time we get to a new factor of 5, we have a new factor of 2 to multiply it with, and 2*5 is the only way we make 10
+// e.g. 1 * 2 * 3 * 4 * 5 * 6 * 7 * 8 * 9 * 10
+// -> 1 * 2 * 3 * (2 * 2) * 5 * (2 * 3) * 7 * (2 * 2 * 2) * (3 * 3) * (2 * 5)
+// We know the number of "10s" in this by calculating the number of 5s
+// So our function will really be 
+/*function zeros(n) {
+
+   // base case: how many 5s
+   var baseFives = Math.floor(n / 5)
+   // in some cases we have 5*5! It has two fives! Or 125! It has three!
+   // And in further issues, what if we are looking at 50?
+
+   // THIS DOESNT WORK. If we look at say, 26, we'll get 1 extra 5 from 25, but we get ANOTHER one from 26
+   // And ANOTHER one from 27
+   var extraFives = 0;
+   for (var power = 2; Math.pow(5, power) <= n; power++) {
+      extraFives+=(power-1);
+   }
+   return baseFives + extraFives;
+}*/
+/*
+function zeros(n) {
+   // Returns Math.floor(n/5) thru 24
+   // Returns Math.floor(n/5) + (n - 24) for 25 thru 125
+   // Returns Math.floor(n/5) + (n - 24) + (n - 124)^2 for 125 through 625
+   // ... and so on
+   console.log(n);
+   var numZeros = Math.floor(n/5);
+   for (var power = 2; Math.pow(5, power) <= n; power++) {
+      console.log(numZeros);
+      numZeros += Math.pow((n - (Math.pow(5, power)-1)),power-1);
+   }
+   return numZeros;
+   // NO THATS SO WRONG
+   // Because * 26 DOES NOT HAVE TWO FIVES IN IT DUMB DUMB
+   // (but 50 has two fives, and 75 has two fives, and 100 has two fives)
+   // So our real solution should be
+   // Math.floor(n/5) -> 1 zero apiece
+   // Math.floor(n / 25) -> 2 zeros apiece
+   // Math.floor(n / 125) -> 3 zeros apiece
+   var numZeros = 0;
+   for (var power = 1; Math.pow(5, power) <= n; power++) {
+      numZeros += Math.floor(n / Math.pow(5,power));
+   }
+   return numZeros;
+}*/
+
+</script>
+</html>
