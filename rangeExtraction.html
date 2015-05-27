@@ -1,0 +1,87 @@
+<html>
+<script>
+
+// Assignment: http://www.codewars.com/kata/51ba717bb08c1cd60f00002f/train/javascript
+// Complete the solution so that it takes a list of integers in increasing order and returns a correctly formatted string in the range format. 
+// solution([-6, -3, -2, -1, 0, 1, 3, 4, 5, 7, 8, 9, 10, 11, 14, 15, 17, 18, 19, 20]);
+// returns "-6,-3-1,3-5,7-11,14,15,17-20"
+
+// Best practices (from site): ehhhhhhhhhhhh I wouldnt say it's best practice.
+// Principle behind this one though is that the inner loop takes over from the outer loop whenever there's a range
+function bpSolution(list) {
+    var s = '';
+    var l = list.length;
+    for(var i=0; i<l; i++){
+      if(list[i] == list[i+2]-2) {
+        s += list[i] + '-';
+        for(i; i<l; i++){
+          if(list[i] != list[i+2]-2) break;
+        }
+      } else {
+        s += list[i];
+        if(i != l-1) s += ',';
+      }
+    }
+    return s;
+}
+
+// Alternate best practices: this one I like
+// The idea behind this: leave the numbers in the list AS THEY ARE, ready to be joined with commas
+// But if we come across a situation where there is a range, we splice to remove the elements of the range, and replace them with our new str
+function bpAltSolution(list) {
+   for(var i = 0; i < list.length; i++){
+      var j = i;
+      while(list[j] - list[j+1] == -1) j++;
+      if(j != i && j-i>1) list.splice(i, j-i+1, list[i] +'-'+list[j]);
+  }
+  return list.join();
+}
+
+// Take 2:
+function cleanSolution(list) {
+   var rangeStart = list[0];
+   var ranges = [];
+   for (var i = 1; i < list.length; i++) {
+      if (list[i] !== list[i-1]+1) {
+         ranges.push({lowest:rangeStart, highest:list[i-1]});
+         rangeStart = list[i];
+      }
+   }
+   ranges.push({lowest:rangeStart, highest:list[i-1]});
+   return ranges.map(function(element) {
+      if (element.lowest === element.highest) return String(element.lowest);
+      else if (element.highest === element.lowest+1) return String(element.lowest)+","+element.highest;
+      else return String(element.lowest)+"-"+element.highest;
+   }).join(",");
+}
+console.log(cleanSolution([-6, -3, -2, -1, 0, 1, 3, 4, 5, 7, 8, 9, 10, 11, 14, 15, 17, 18, 19, 20]));
+
+// Take 1:
+function solution(list) {
+   var rangeList = [];
+   var currLowest = list[0];
+   var currHighest = list[0];
+   for (var i = 1; i < list.length; i++) {
+      // new range
+      if (list[i] != currHighest+1) {
+         rangeList.push({lowest:currLowest, highest:currHighest});
+         currLowest = list[i];
+         currHighest = list[i];
+      }
+      // continuation of range
+      else {
+         currHighest = list[i];
+      }
+   }
+   rangeList.push({lowest:currLowest, highest: currHighest});
+   return rangeList.map(function(element) {
+      if (element.lowest === element.highest) return String(element.lowest);
+      else if (element.highest === element.lowest+1) return String(element.lowest)+","+element.highest;
+      else return String(element.lowest)+"-"+element.highest;
+   }).join(",");
+}
+console.log(solution([-6, -3, -2, -1, 0, 1, 3, 4, 5, 7, 8, 9, 10, 11, 14, 15, 17, 18, 19, 20]));
+console.log(bpAltSolution([-6, -3, -2, -1, 0, 1, 3, 4, 5, 7, 8, 9, 10, 11, 14, 15, 17, 18, 19, 20]));
+
+</script>
+</html>
