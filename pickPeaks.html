@@ -1,0 +1,90 @@
+<html>
+<script>
+
+// http://www.codewars.com/kata/5279f6fe5ab7f447890006a7/train/javascript
+// In this kata, you will create an object that returns the positions and the values of the "peaks" (or local maxima) of a numeric array.  For example, the array arr = [ 0 , 1 , 2 , 5 , 1 , 0 ] has a peak in position 3 with a value of 5 (arr[3] = 5) The output will be returned as an object with two properties: pos and peaks. Both of these properties should be arrays. If there is no peak in the given array, then the output should be {pos: [], peaks: []}.
+
+// NOTE: plateaus. In the case of 1 2 2 1, return the peak/pos of the first 2. Makes it significantly more complicated.
+
+// Best practices version: similar to my first attempt, using the < through an iteration of the array. His cleverness though was after placement, setting to a cardinal value of position to prevent adding multiple times on a decline (e.g. 4, 3, 2, 1) 
+function bpPickPeaks(arr) {
+  var result = {pos: [], peaks: []};
+  if(arr.length > 2) {
+    var pos = -1;
+    for(var i=1; i<arr.length;i++){
+      if(arr[i] > arr[i-1]) {
+        pos = i;
+      } else if(arr[i] < arr[i-1] && pos != -1) {
+        result.pos.push(pos);
+        result.peaks.push(arr[pos]);
+        pos = -1;
+      }
+    }
+  }
+  return result;
+}
+
+// Take 1:
+function pickPeaks(arr) {
+/*   var out = {
+      pos: [],
+      peaks: []
+   };*/
+   // First definition of a peak: something greater than either of the two neighboring elements
+   // However, this doesn't pass the plateau test. Can we modify the above def to handle plateaus?
+   // What if we turn ALL the values in the array into position/value objects
+   // And if we see multiple value objects in a row, we remove them from our array
+   // Then we can apply our simple test
+   var mapped = arr.map(function(value, idx) { return {pos: idx, value: value}; });
+   var deduped = mapped.filter(function(element,idx,arr) {
+      return element.value != (arr[idx-1]||{value: null}).value;
+   });
+   // NOTE: the commented out segment (manually excluding first and last indices) will work fine, I just don't like it b/c it doesn't treat all elements equivalently.
+   // The addition of || {value:Infinity} removes the need for them
+   var reduced = deduped.reduce(function(peakList, element,idx,arr) {
+      if (/*idx > 0 && idx < arr.length-1 && */element.value > (arr[idx-1]||{value:Infinity}).value && element.value > (arr[idx+1]||{value:Infinity}).value) {
+         peakList.pos.push(element.pos);
+         peakList.peaks.push(element.value);
+      }
+      return peakList;
+   }, {pos: [], peaks: []});
+   return reduced;
+}
+console.log(pickPeaks([3,2,3,6,4,1,2,3,2,1,2,3]));
+/*console.log(pickPeaks([1,2,2,2,1]));*/
+
+/* YE OLDE CODE */
+   /*
+   // method 1: filter out everything that maps to key already in our uniques obj
+   // method 2: just use the uniques obj. Eh, I like method 1 more
+   // NOTE: our deduping method here is inaccurate, because it's not if you've EVER seen this thing before, it's if you saw it multiple times IN A ROW
+   var uniques = {};
+   var deduped = mapped.filter(function(element) {
+      if (uniques.hasOwnProperty(element.value)) return false;
+      else {
+         uniques[element.value] = true;
+         return true;
+      }
+   });
+*/
+
+/*
+   var prev = arr[0];
+   var prevAt = 0;
+   // note: this will have issues with first element 'half peaks'
+   // Also it doesnt handle declines at all. This is fundamentally flawed.
+   for (var i = 1; i < arr.length; i++) {
+      // we saw a peak, output it
+      if (arr[i] < prev) {
+         out.pos.push(prevAt);
+         out.peaks.push(prev);
+      }
+      // increment in all cases EXCEPT plateaus
+      if (arr[i] != prev) {
+         prev = arr[i];
+         prevAt = i;
+      }
+   }
+*/
+</script>
+</html>
