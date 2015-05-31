@@ -1,0 +1,42 @@
+<html>
+<script>
+
+// http://www.codewars.com/kata/5324945e2ece5e1f32000370/train/javascript
+// Given the string representations of two integers, return the string representation of the sum of those integers.  For example:
+// sumStrings('1','2') // => '3'
+// A string representation of an integer will contain no characters besides the ten numerals "0" to "9".
+
+// Take 2: how can we make this precisely handle VERY Long nums? A: one digit at a time
+function longSumStrings(a, b) {
+   var maxLength = Math.max(a.length, b.length);
+   var carried = 0;
+   var sum = "";
+   // handle addition:
+   for (var i = 0; i < maxLength; i++) {
+      var digit1 = Number(a.charAt(a.length-1-i));
+      var digit2 = Number(b.charAt(b.length-1-i));
+      var strSum = String(digit1+digit2+carried);
+      carried = (strSum.length > 1);
+      sum = strSum.charAt(strSum.length-1)+sum;
+   }
+   sum = Number(carried) + sum;
+
+   // Trim preceding 0s
+   var numPreceding0s = 0;
+   for (numPreceding0s; numPreceding0s < sum.length; numPreceding0s++) {
+      if (sum.charAt(numPreceding0s) !== "0") break;
+   }
+   return sum.substr(numPreceding0s);
+}
+
+// Take 1
+function sumStrings(a, b) {
+   return String(Number(a) + Number(b));
+}
+/*console.log(longSumStrings("1234567","4567890"));*/
+/*console.log(longSumStrings("800","9567"));*/
+console.log(longSumStrings("00103","08567"));
+
+
+</script>
+</html>
