@@ -1,0 +1,66 @@
+<html>
+<script>
+
+// Take 2
+function formatDuration(seconds) {
+   if (seconds === 0) return "now";
+
+   // could do this with objects w/ 3 properties instead of 3 corresponding arrs. Would be cleaner to add/remove elements that way
+   var unit_names = ["second","minute","hour","day","year"];
+   var durations = [1,60,3600,86400,31536000];
+   var counts = [];
+   for (var i = durations.length-1; i >= 0; i--) {
+      counts[i] = Math.floor(seconds / durations[i]);
+      seconds = seconds % durations[i];
+   }
+
+   // Output
+   var str = "";
+   var numElementsAdded = 0;
+   for (var i = 0; i < durations.length; i++) {
+      if (counts[i] > 0) {
+         // formatting separators
+         if (numElementsAdded === 1) str = " and "+str;
+         else if (numElementsAdded > 1) str = ", "+str;
+
+         // Add to output string
+         var suffix = (counts[i] > 1) ? "s" : "";
+         str = counts[i]+" "+unit_names[i]+suffix + str;
+         numElementsAdded++;
+      }
+   }
+   return str;
+}
+console.log(formatDuration(3662));
+
+/* YE OLDE CODE*/
+/*
+// Take 1
+function formatDuration(seconds) {
+   var remainder;
+   var years = Math.floor(seconds / 60 / 60 / 24 / 365);
+   remainder = seconds % (60 * 60 * 24 * 365);
+   var days = Math.floor(remainder / 60 / 60 / 24);
+   remainder = remainder % (60 * 60 * 24);
+   var hours = Math.floor(remainder / 60 / 60);
+   remainder = remainder % (60 * 60);
+   var mins = Math.floor(remainder / 60);
+   remainder = remainder % (60);
+   var secs = remainder;
+   var str = "";
+   var numElementsAdded = 0;
+   if (secs != 0) {
+      str = secs+ " seconds";
+      numElementsAdded++;
+   }
+   if (mins != 0) {
+      if (numElementsAdded === 1) { str = mins+" and "+str; }
+      else { str = mins+
+      numElementsAdded++;
+   }
+   // OKAY WE CAN TOTALLY KEEP DOING THIS AND IT WILL WORK
+   // BUT ITS UGLY KLUDGE
+   return str;
+}*/
+</script>
+</html>
