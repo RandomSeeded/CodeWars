@@ -1,0 +1,20 @@
+<html>
+<script>
+
+function deleteNth(arr, x) {
+   var seen = Object.create(null);
+   // NOTE: arr.filter returns a new array, not modified
+   var filtered = arr.filter(function(value) {
+      if (seen[value] === undefined) { seen[value] = 1; }
+      else { seen[value]++; }
+
+      if (seen[value] > x) { return false; }
+      else return true;
+   });
+   return filtered;
+}
+console.log(deleteNth([20,37,20,21],1));
+console.log(deleteNth([1,1,3,3,7,2,2,2,2], 3));
+
+</script>
+</html>
