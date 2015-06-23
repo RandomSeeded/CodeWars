@@ -1,0 +1,20 @@
+<html>
+<script>
+
+// take1
+function shorten(string, length, glue) {
+	if (glue === undefined) glue = "...";
+	if (string.length <= length) return string;
+	else if (length - glue.length < 2) return string.substr(0,length);
+	else return string.substr(0, Math.floor((length-glue.length) / 2)) + glue + string.substr(string.length-Math.ceil((length-glue.length)/2));
+}
+
+var sentence = "The quick brown fox jumps over the lazy dog";
+var sentence2 = "short";
+console.log(shorten(sentence, 27,'---'));
+console.log(shorten(sentence, 27,'----'));
+console.log(shorten(sentence2, 27));
+console.log(shorten('hello world', 5,'----'));
+
+</script>
+</html>
